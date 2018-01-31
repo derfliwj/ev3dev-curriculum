@@ -8,6 +8,7 @@ Authors: David Fisher and PUT_YOUR_NAME_HERE.
 import ev3dev.ev3 as ev3
 import robot_controller as robo
 
+
 # TODO: 2. Copy the contents of m3_drive_inches_via_library.py and paste that text into this file below these comments.
 #   Change the initial print and speak commands to reflect this module, like this...
 #     print("--------------------------------------------")
@@ -69,13 +70,12 @@ def main():
         degree = int(input("degree (-360-360): "))
         if degree == 0:
             break
-        robot.drive_degree(degree,speed_deg_per_second)
+        robot.drive_degree(degree, speed_deg_per_second)
         robot.drive_inches(degree, speed_deg_per_second)
         ev3.Sound.beep().wait()  # Fun little beep
 
     print("Goodbye!")
     ev3.Sound.speak("Goodbye").wait()
-
 
 
 # ----------------------------------------------------------------------
