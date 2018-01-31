@@ -8,8 +8,8 @@ to collect data, then make an equation to figure out the time needed given the d
 
 Note: If future modules you will learn different (BETTER) ways to drive a given distance.
 
-Authors: David Fisher and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+Authors: David Fisher and Zewei Xiang and Wesley Derflinger.
+"""  # DONE: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 # TODO: 2. Get a yardstick or tape measure to do some testing with /examples/motors/drive_input_speed.py
 #   Have your whole team work this activity together.
@@ -29,15 +29,15 @@ Authors: David Fisher and PUT_YOUR_NAME_HERE.
 #
 #  Record your calculated speed conversions here:
 #   Tests @ 10 seconds:
-#     100 degrees / second  -->  traveled XXX inches  -->  YYY inches / second
-#     200 degrees / second  -->  traveled XXX inches  -->  YYY inches / second
-#     300 degrees / second  -->  traveled XXX inches  -->  YYY inches / second
-#     400 degrees / second  -->  traveled XXX inches  -->  YYY inches / second
+#    100 degrees / second  -->  traveled  13 inches  -->   inches / second/
+#     200 degrees / second  -->  traveled  24 inches  -->  YYY inches / second
+#     300 degrees / second  -->  traveled  35.5 inches  -->  YYY inches / second
+#     400 degrees / second  -->  traveled  45 inches  -->  YYY inches / second
 #   Tests @ 5 seconds:
-#     500 degrees / second  -->  traveled XXX inches  -->  YYY inches / second
-#     600 degrees / second  -->  traveled XXX inches  -->  YYY inches / second
-#     700 degrees / second  -->  traveled XXX inches  -->  YYY inches / second
-#     800 degrees / second  -->  traveled XXX inches  -->  YYY inches / second
+#     300 degrees / second  -->  traveled 17 inches  -->  YYY inches / second
+#     600 degrees / second  -->  traveled 34 inches  -->  YYY inches / second
+#     700 degrees / second  -->  traveled  39 inches  -->  YYY inches / second
+#     800 degrees / second  -->  traveled  45 inches  -->  YYY inches / second
 #     900 degrees / second  -->  traveled XXX inches  -->  YYY inches / second (probably no faster than 800)
 #
 # TODO: 3. Make an equation
@@ -54,6 +54,7 @@ Authors: David Fisher and PUT_YOUR_NAME_HERE.
 #     will be making a formula like this...
 #
 #   Time (seconds) = Distance (inches, as input from the user) / Speed (inches/second, as converted based on user input)
+#   Distance = speed*time*0.0113
 #
 #   Note: To repeat again, in later modules you will learn different (better) ways to travel a given distance using
 #     motor encoders, so just make a simple rough approximation here, since later we'll do it better in a different way.
@@ -89,3 +90,42 @@ Authors: David Fisher and PUT_YOUR_NAME_HERE.
 # TODO: 8. Call over a TA or instructor to sign your team's checkoff sheet and do a code review.
 #
 #  Observation you should make, the pattern run_forever-->time.sleep-->stop naturally blocks code execution until done.
+
+import ev3dev.ev3 as ev3
+import time
+
+
+def main():
+    print("--------------------------------------------")
+    print("  Timed Driving")
+    print("--------------------------------------------")
+    ev3.Sound.speak("Timed Driving").wait()
+
+    # Connect two large motors on output ports B and C
+    left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
+    right_motor = ev3.LargeMotor(ev3.OUTPUT_D)
+
+    # Check that the motors are actually connected
+    assert left_motor.connected
+    assert right_motor.connected
+
+    time_s = 1  # Any value other than 0.
+    while time_s != 0:
+        sp = int(input("Enter a speed (0 to 900 dps): "))
+        dist = int(input("Distance to travel (inches):"))
+        left_motor.run_forever(speed_sp=sp)
+        right_motor.run_forever(speed_sp=sp)
+        time_s = dist/(sp*0.012)
+        time.sleep(time_s)
+        left_motor.stop()
+        right_motor.stop(stop_action="brake")
+
+    print("Goodbye!")
+    ev3.Sound.speak("Goodbye").wait()
+
+
+# ----------------------------------------------------------------------
+# Calls  main  to start the ball rolling.
+# ----------------------------------------------------------------------
+main()
+
