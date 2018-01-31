@@ -18,13 +18,18 @@ import time
 
 class Snatch3r(object):
     """Commands for the Snatch3r robot that might be useful in many different programs."""
+
     def __init__(self):
         """construct a left motor and a right motor"""
-        self.left_motor = None #nut sure about this line
+        self.left_motor = None  # nut sure about this line
+        self.right_motor = None
 
-        
-        assert self.left_motor
+        self.left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
+        self.right_motor = ev3.LargeMotor(ev3.OUTPUT_D)
+
+        assert self.left_motor.connected
+        assert self.right_motor.connected
 
 
-    # TODO: Implement the Snatch3r class as needed when working the sandox exercises
-    # (and delete these comments)
+        # TODO: Implement the Snatch3r class as needed when working the sandox exercises
+        # (and delete these comments)
