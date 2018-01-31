@@ -5,6 +5,8 @@ Much like you have a drive_inches command in your library, you will now make a t
 
 Authors: David Fisher and PUT_YOUR_NAME_HERE.
 """  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+import ev3dev.ev3 as ev3
+import robot_controller as robo
 
 # TODO: 2. Copy the contents of m3_drive_inches_via_library.py and paste that text into this file below these comments.
 #   Change the initial print and speak commands to reflect this module, like this...
@@ -48,3 +50,35 @@ Authors: David Fisher and PUT_YOUR_NAME_HERE.
 # TODO: 6. Call over a TA or instructor to sign your team's checkoff sheet and do a code review.
 #
 # Observations you should make, using run_to_rel_pos is useful for accurate turns, but testing takes time.
+def main():
+    # --------------------------------------------------------------
+    # We have already implemented this module for you.
+    # There are no TODOs in the code.  Do NOT modify it.
+    # You are not allowed to make any changes to this code.
+    # --------------------------------------------------------------
+    print("--------------------------------------------")
+    print(" Drive inches")
+    print("--------------------------------------------")
+    ev3.Sound.speak("Drive inches").wait()
+    robot = robo.Snatch3r()
+
+    while True:
+        speed_deg_per_second = int(input("Speed (0 to 900 dps): "))
+        if speed_deg_per_second == 0:
+            break
+        degree = int(input("degree (-360-360): "))
+        if degree == 0:
+            break
+        robot.drive_degree(degree,speed_deg_per_second)
+        robot.drive_inches(degree, speed_deg_per_second)
+        ev3.Sound.beep().wait()  # Fun little beep
+
+    print("Goodbye!")
+    ev3.Sound.speak("Goodbye").wait()
+
+
+
+# ----------------------------------------------------------------------
+# Calls  main  to start the ball rolling.
+# ----------------------------------------------------------------------
+main()

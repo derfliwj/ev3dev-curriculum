@@ -43,5 +43,3 @@ Authors: David Fisher and PUT_YOUR_NAME_HERE.
 # TODO: 7. Call over a TA or instructor to sign your team's checkoff sheet and do a code review.
 #
 # Observations you should make, run_to_rel_pos is easier to use since it uses encoders that are independent of speed.
-
-

@@ -33,3 +33,33 @@ class Snatch3r(object):
 
         # TODO: Implement the Snatch3r class as needed when working the sandox exercises
         # (and delete these comments)
+
+    def drive_inches(self, inch, speed):
+        position = inch * 90
+        self.left_motor.run_to_rel_pos(position_sp=position,
+                                       speed_sp=speed)
+        self.right_motor.run_to_rel_pos(position_sp=position,
+                                        speed_sp=speed)
+        self.left_motor.wait_while(ev3.Motor.STATE_RUNNING)
+        self.right_motor.wait_while(ev3.Motor.STATE_RUNNING)
+
+        ev3.Sound.beep().wait()
+
+    def drive_degree(self, degree, speed):
+        position = 2 * 3.14 * 3 * degree / 360
+        if position > 0:
+            self.left_motor.run_to_rel_pos(position_sp=position,
+                                           speed_sp=-speed)
+            self.right_motor.run_to_rel_pos(position_sp=position,
+                                            speed_sp=speed)
+            self.left_motor.wait_while(ev3.Motor.STATE_RUNNING)
+            self.right_motor.wait_while(ev3.Motor.STATE_RUNNING)
+
+        if position < 0:
+            position = 0 - position
+            self.left_motor.run_to_rel_pos(position_sp=position,
+                                           speed_sp=speed)
+            self.right_motor.run_to_rel_pos(position_sp=position,
+                                            speed_sp=-speed)
+            self.left_motor.wait_while(ev3.Motor.STATE_RUNNING)
+            self.right_motor.wait_while(ev3.Motor.STATE_RUNNING)
