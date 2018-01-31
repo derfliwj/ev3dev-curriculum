@@ -71,7 +71,6 @@ def main():
         if degree == 0:
             break
         robot.drive_degree(degree, speed_deg_per_second)
-        robot.drive_inches(degree, speed_deg_per_second)
         ev3.Sound.beep().wait()  # Fun little beep
 
     print("Goodbye!")
