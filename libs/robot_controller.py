@@ -12,8 +12,6 @@
 """
 
 import ev3dev.ev3 as ev3
-import math
-import time
 
 
 class Snatch3r(object):
@@ -21,8 +19,6 @@ class Snatch3r(object):
 
     def __init__(self):
         """construct a left motor and a right motor"""
-        self.left_motor = None  # nut sure about this line
-        self.right_motor = None
 
         self.left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
         self.right_motor = ev3.LargeMotor(ev3.OUTPUT_D)
@@ -30,11 +26,8 @@ class Snatch3r(object):
         assert self.left_motor.connected
         assert self.right_motor.connected
 
-
-        # TODO: Implement the Snatch3r class as needed when working the sandox exercises
-        # (and delete these comments)
-
     def drive_inches(self, inch, speed):
+        """Drives robot a distance at a given speed."""
         position = inch * 90
         self.left_motor.run_to_rel_pos(position_sp=position,
                                        speed_sp=speed)
@@ -43,11 +36,8 @@ class Snatch3r(object):
         self.left_motor.wait_while(ev3.Motor.STATE_RUNNING)
         self.right_motor.wait_while(ev3.Motor.STATE_RUNNING)
 
-        ev3.Sound.beep().wait()
-
     def drive_degree(self, degree, speed):
         position = 2 * 3.14 * 3 * degree / 360
-        ev3.Sound.speak("Turn degree").wait()
         position = position * 90
         if position > 0:
             self.left_motor.run_to_rel_pos(position_sp=-position,
@@ -57,7 +47,7 @@ class Snatch3r(object):
             self.left_motor.wait_while(ev3.Motor.STATE_RUNNING)
             self.right_motor.wait_while(ev3.Motor.STATE_RUNNING)
 
-        if position < 0:
+        elif position < 0:
             position = 0 - position
             self.left_motor.run_to_rel_pos(position_sp=position,
                                            speed_sp=speed)
