@@ -50,10 +50,54 @@ def main():
                   # ev3.Leds.ORANGE,  # Too close to another color in my opinion
                   # ev3.Leds.YELLOW,  # Too close to another color in my opinion
                   ev3.Leds.AMBER]
+    def push_up(state):
+        if state:
+            print('Up')
+            ev3.Leds.all_off()
+
+    def push_left(state):
+        if state:
+            print('Left')
+            ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN)
+            ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.BLACK)
+
+    def push_right(state):
+        if state:
+            print('Right')
+            ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.RED)
+            ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.BLACK)
+
+    def push_down(state):
+        count = 0
+        if state:
+            count = count + 1
+            if count == 1:
+                ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.GREEN)
+                ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN)
+            if count == 2:
+                ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.RED)
+                ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.RED)
+            if count == 3:
+                ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.AMBER)
+                ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.AMBER)
+            if count == 4:
+                ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.BLACK)
+                ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.BLACK)
+            if count == 5:
+                count = 0
+            time.sleep(.01)
+
+
+    btn.on_up = push_up
+    btn.on_left = push_left
+    btn.on_right = push_right
+    btn.on_down = push_down
 
     current_color_index = 0
     while True:
-        # TODO: 3. Implement the left, right, and up buttons as follows:
+        btn.process()
+        time.sleep(.01)
+        # DONE: 3. Implement the left, right, and up buttons as follows:
         #    When the up button is being pressed:
         #      -- print the word "up"
         #      -- turn off all LEDs
