@@ -47,6 +47,8 @@ class Snatch3r(object):
 
     def drive_degree(self, degree, speed):
         position = 2 * 3.14 * 3 * degree / 360
+        ev3.Sound.speak("Turn degree").wait()
+        position = position * 90
         if position > 0:
             self.left_motor.run_to_rel_pos(position_sp=-position,
                                            speed_sp=speed)
