@@ -12,6 +12,7 @@
 """
 
 import ev3dev.ev3 as ev3
+import time
 
 
 class Snatch3r(object):
@@ -22,9 +23,13 @@ class Snatch3r(object):
 
         self.left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
         self.right_motor = ev3.LargeMotor(ev3.OUTPUT_D)
+        self.arm_motor = ev3.MediumMotor(ev3.OUTPUT_A)
+        self.touch_sensor = ev3.TouchSensor()
 
         assert self.left_motor.connected
         assert self.right_motor.connected
+        assert self.arm_motor.connected
+        assert self.touch_sensor
 
     def drive_inches(self, inch, speed):
         """Drives robot a distance at a given speed."""
@@ -37,6 +42,7 @@ class Snatch3r(object):
         self.right_motor.wait_while(ev3.Motor.STATE_RUNNING)
 
     def drive_degree(self, degree, speed):
+        """Turns Robot a distance at a given speed."""
         position = 2 * 3.14 * 3 * degree / 360
         position = position * 90
         if position > 0:
@@ -55,3 +61,32 @@ class Snatch3r(object):
                                             speed_sp=speed)
             self.left_motor.wait_while(ev3.Motor.STATE_RUNNING)
             self.right_motor.wait_while(ev3.Motor.STATE_RUNNING)
+
+    def arm_calibration(self):
+        """Calibrates the arm"""
+        self.arm_motor.run_forever(speed_sp=900)
+        while not self.touch_sensor.is_pressed:
+            time.sleep(0.01)
+        self.arm_motor.stop(stop_action=ev3.Motor.STOP_ACTION_BRAKE)
+        ev3.Sound.beep().wait()
+        arm_revolutions_for_full_range = 14.2 * 360
+        self.arm_motor.run_to_rel_pos(position_sp=-arm_revolutions_for_full_range)
+        self.arm_motor.wait_while(ev3.Motor.STATE_RUNNING)
+        ev3.Sound.beep().wait()
+
+        self.arm_motor.position = 0
+
+    def arm_up(self):
+        """Moves the Snatch3r arm to the up position."""
+        self.arm_motor.run_forever(speed_sp=900)
+        while not self.touch_sensor.is_pressed:
+            time.sleep(0.01)
+        self.arm_motor.stop(stop_action=ev3.Motor.STOP_ACTION_BRAKE)
+        ev3.Sound.beep().wait()
+
+    def arm_down(self):
+        """Moves the Snatch3r arm to the down position."""
+        arm_revolutions_for_full_range = 14.2 * 360
+        self.arm_motor.run_to_rel_pos(position_sp=-arm_revolutions_for_full_range)
+        self.arm_motor.wait_while(ev3.Motor.STATE_RUNNING)
+        ev3.Sound.beep().wait()
