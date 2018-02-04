@@ -40,16 +40,16 @@ def main():
     # time.sleep(3)
 
     # Green LEDs
-    # ev3.Sound.speak("Green")
+    ev3.Sound.speak("Green")
     ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN)
     ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.GREEN)
-    # time.sleep(3)
+    time.sleep(3)
 
     # Turn LEDs off
-    # ev3.Sound.speak("Off")
+    ev3.Sound.speak("Off")
     ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.BLACK)
     ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.BLACK)
-    # ev3.Leds.all_off()  # Could also use this single command if turning both LEDs off.
+    ev3.Leds.all_off()  # Could also use this single command if turning both LEDs off.
     print('Press the Back button on the EV3 to exit this program.')
 
     # Buttons on EV3 (the real focus of this module)
