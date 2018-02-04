@@ -16,6 +16,16 @@ import ev3dev.ev3 as ev3
 import time
 
 
+class num(object):
+    def __init__(self):
+        self.index = 0
+
+    def increase(self):
+        self.index = self.index + 1
+        if self.index > 3:
+            self.index = 0
+
+
 def main():
     print("--------------------------------------------")
     print(" Buttons and LEDs")
@@ -27,16 +37,16 @@ def main():
     ev3.Sound.speak("Red")
     ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.RED)
     ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.RED)
-    time.sleep(3)
+    # time.sleep(3)
 
     # Green LEDs
-    ev3.Sound.speak("Green")
+    # ev3.Sound.speak("Green")
     ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN)
     ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.GREEN)
-    time.sleep(3)
+    # time.sleep(3)
 
     # Turn LEDs off
-    ev3.Sound.speak("Off")
+    # ev3.Sound.speak("Off")
     ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.BLACK)
     ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.BLACK)
     # ev3.Leds.all_off()  # Could also use this single command if turning both LEDs off.
@@ -44,12 +54,15 @@ def main():
 
     # Buttons on EV3 (the real focus of this module)
     btn = ev3.Button()  # Construct the one and only EV3 Button object
-    led_colors = [ev3.Leds.BLACK,  # This list is useful for the down button in TO DO 4.
+    led_colors = [ev3.Leds.BLACK,
+                  # This list is useful for the down button in TO DO 4.
                   ev3.Leds.GREEN,
                   ev3.Leds.RED,
                   # ev3.Leds.ORANGE,  # Too close to another color in my opinion
                   # ev3.Leds.YELLOW,  # Too close to another color in my opinion
                   ev3.Leds.AMBER]
+    Index = num()
+
     def push_up(state):
         if state:
             print('Up')
@@ -67,33 +80,32 @@ def main():
             ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.RED)
             ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.BLACK)
 
-    def push_down(state):
-        count = 0
+    def push_down(state, Index, led_colors):
         if state:
-            count = count + 1
-            if count == 1:
-                ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.GREEN)
-                ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN)
-            if count == 2:
+            # if index == 1:
+
+            print('down')
+            print(Index.index)
+            ev3.Leds.set_color(ev3.Leds.RIGHT, led_colors[Index.index])
+            ev3.Leds.set_color(ev3.Leds.LEFT, led_colors[Index.index])
+            """elif index == 2:
                 ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.RED)
                 ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.RED)
-            if count == 3:
+            elif index == 3:
                 ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.AMBER)
                 ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.AMBER)
-            if count == 4:
+            elif index == 4:
                 ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.BLACK)
-                ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.BLACK)
-            if count == 5:
-                count = 0
-            time.sleep(.01)
+                ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.BLACK)"""
 
+            Index.increase()
+            time.sleep(.01)
 
     btn.on_up = push_up
     btn.on_left = push_left
     btn.on_right = push_right
-    btn.on_down = push_down
+    btn.on_down = lambda state: push_down(state, Index, led_colors)
 
-    current_color_index = 0
     while True:
         btn.process()
         time.sleep(.01)
@@ -144,7 +156,8 @@ def main():
 
         if btn.backspace:
             break
-        time.sleep(0.01)  # Best practice to have a short delay to avoid working too hard between loop iterations.
+        time.sleep(
+            0.01)  # Best practice to have a short delay to avoid working too hard between loop iterations.
 
     # Best practice to leave the LEDs on after you finish a program so you don't put away the robot while still on.
     ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN)
