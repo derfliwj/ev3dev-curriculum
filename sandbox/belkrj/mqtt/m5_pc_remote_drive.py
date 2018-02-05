@@ -33,6 +33,7 @@ import mqtt_remote_method_calls as com
 
 def main():
     mqtt_client = com.MqttClient()
+    mqtt_client.connect_to_ev3()
 
     # TODO: 2. Setup an mqtt_client.  Notice that since you don't need to receive any messages you do NOT need to have
     # a MyDelegate class.  Simply construct the MqttClient with no parameter in the constructor (easy).
@@ -116,20 +117,29 @@ def main():
 # Tkinter callbacks
 # ----------------------------------------------------------------------
 # TODO: 4. Implement the functions for the drive button callbacks.
-def press_up_button(mqtt_client, left_speed, right_speed):
+def press_forward_button(mqtt_client, left_speed, right_speed):
+    print('Forward button pressed.')
+    mqtt_client.send_message("forward_button", [left_speed, right_speed])
 
 
 def press_left_button(mqtt_client, left_speed, right_speed):
+    print('Left button pressed.')
+    mqtt_client.send_message("left_button", [left_speed, right_speed])
 
 
 def press_stop_button(mqtt_client):
+    print('Stop button pressed.')
+    mqtt_client.send_message("stop_button")
 
 
 def press_right_button(mqtt_client, left_speed, right_speed):
+    print('Right button pressed.')
+    mqtt_client.send_message("right_button", [left_speed, right_speed])
 
 
 def press_back_button(mqtt_client, left_speed, right_speed):
-
+    print('Back button pressed')
+    mqtt_client.send_message("back_button",[left_speed, right_speed])
 
 
 # TODO: 5. Call over a TA or instructor to sign your team's checkoff sheet and do a code review.  This is the final one!
