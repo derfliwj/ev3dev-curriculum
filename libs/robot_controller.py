@@ -90,3 +90,41 @@ class Snatch3r(object):
         self.arm_motor.run_to_rel_pos(position_sp=-arm_revolutions_for_full_range)
         self.arm_motor.wait_while(ev3.Motor.STATE_RUNNING)
         ev3.Sound.beep().wait()
+
+    def loop_forever(self):
+        """keeps snatch3r recieving mqtt messagess until shutdown is activated"""
+        self.running = True
+        while self.running:
+            time.sleep(0.1)
+
+    def shutdown(self):
+        """shutdowns everything on ev3"""
+        self.running = False
+        ev3.Leds.all_off()
+        self.left_motor.stop()
+        self.right_motor.stop()
+
+    def forward_button(self, left_speed, right_speed):
+        """moves robot forward at set speeds"""
+        self.left_motor.run_forever(speed_sp=left_speed)
+        self.right_motor.run_forever(speed_sp=right_speed)
+
+    def left_button(self, left_speed, right_speed):
+        """moves robot left at set speed"""
+        self.left_motor.run_forever(speed_sp=left_speed * 0)
+        self.right_motor.run_forever(speed_sp=right_speed)
+
+    def stop_button(self):
+        """stops robot"""
+        self.left_motor.stop()
+        self.right_motor.stop()
+
+    def right_button(self, left_speed, right_speed):
+        """moves robot right at set speed"""
+        self.left_motor.run_forever(speed_sp=left_speed)
+        self.right_motor.run_forever(speed_sp=right_speed * 0)
+
+    def reverse_button(self, left_speed, right_speed):
+        """moves robot in reverse at set speed"""
+        self.left_motor.run_forever(speed_sp=-left_speed)
+        self.right_motor.run_forever(speed_sp=-right_speed)
