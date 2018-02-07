@@ -25,11 +25,13 @@ class Snatch3r(object):
         self.right_motor = ev3.LargeMotor(ev3.OUTPUT_D)
         self.arm_motor = ev3.MediumMotor(ev3.OUTPUT_A)
         self.touch_sensor = ev3.TouchSensor()
+        self.color_sensor = ev3.ColorSensor()
 
         assert self.left_motor.connected
         assert self.right_motor.connected
         assert self.arm_motor.connected
         assert self.touch_sensor
+        assert self.color_sensor
 
     def drive_inches(self, inch, speed):
         """Drives robot a distance at a given speed."""
@@ -109,7 +111,7 @@ class Snatch3r(object):
         self.left_motor.run_forever(speed_sp=int(left_speed))
         self.right_motor.run_forever(speed_sp=int(right_speed))
 
-    def left_button(self, left_speed, right_speed):
+    def left_button(self, right_speed):
         """moves robot left at set speed"""
         self.right_motor.run_forever(speed_sp=int(right_speed))
 
@@ -120,7 +122,7 @@ class Snatch3r(object):
         self.right_motor.stop()
 
 
-    def right_button(self, left_speed, right_speed):
+    def right_button(self, left_speed):
         """moves robot right at set speed"""
         self.left_motor.run_forever(speed_sp=int(left_speed))
 
