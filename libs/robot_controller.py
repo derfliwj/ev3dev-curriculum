@@ -106,25 +106,25 @@ class Snatch3r(object):
 
     def forward_button(self, left_speed, right_speed):
         """moves robot forward at set speeds"""
-        self.left_motor.run_forever(speed_sp=left_speed)
-        self.right_motor.run_forever(speed_sp=right_speed)
+        self.left_motor.run_forever(speed_sp=int(left_speed))
+        self.right_motor.run_forever(speed_sp=int(right_speed))
 
     def left_button(self, left_speed, right_speed):
         """moves robot left at set speed"""
-        self.left_motor.run_forever(speed_sp=left_speed * 0)
-        self.right_motor.run_forever(speed_sp=right_speed)
+        self.right_motor.run_forever(speed_sp=int(right_speed))
 
     def stop_button(self):
         """stops robot"""
+        print("real stop")
         self.left_motor.stop()
         self.right_motor.stop()
 
+
     def right_button(self, left_speed, right_speed):
         """moves robot right at set speed"""
-        self.left_motor.run_forever(speed_sp=left_speed)
-        self.right_motor.run_forever(speed_sp=right_speed * 0)
+        self.left_motor.run_forever(speed_sp=int(left_speed))
 
     def reverse_button(self, left_speed, right_speed):
         """moves robot in reverse at set speed"""
-        self.left_motor.run_forever(speed_sp=-left_speed)
-        self.right_motor.run_forever(speed_sp=-right_speed)
+        self.left_motor.run_forever(speed_sp=-int(left_speed))
+        self.right_motor.run_forever(speed_sp=-int(right_speed))
