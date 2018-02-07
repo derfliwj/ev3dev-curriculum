@@ -121,7 +121,6 @@ class Snatch3r(object):
         self.left_motor.stop()
         self.right_motor.stop()
 
-
     def right_button(self, left_speed):
         """moves robot right at set speed"""
         self.left_motor.run_forever(speed_sp=int(left_speed))
