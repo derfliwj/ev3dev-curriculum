@@ -271,7 +271,7 @@ def details_operation_unthinkable():
     unthinkable_frame = ttk.Frame(unthinkable_root, padding=100)
     unthinkable_frame.grid()
 
-    unthinkable_label = ttk.Label(unthinkable_frame, text='Details:')
+    unthinkable_label = ttk.Label(unthinkable_frame, text='Details:', relief='raised')
     unthinkable_label.grid()
 
     unthinkable_detials_label_l1 = ttk.Label(unthinkable_frame, text='The year is 1945.')
@@ -334,7 +334,7 @@ def details_operation_savior():
     savior_frame = ttk.Frame(savior_root, padding=100)
     savior_frame.grid()
 
-    savior_label = ttk.Label(savior_frame, text='Details:')
+    savior_label = ttk.Label(savior_frame, text='Details:', relief='raised')
     savior_label.grid()
 
     savior_details_label_l1 = ttk.Label(savior_frame, text='The year is 1973.')
