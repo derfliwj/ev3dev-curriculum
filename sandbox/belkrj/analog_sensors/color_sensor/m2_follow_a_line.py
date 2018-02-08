@@ -12,8 +12,8 @@ f - Follow the line until the touch sensor is pressed.  You are allowed to assum
      Extra - For a harder challenge could you drive on the black line and handle left or right turns?
 q - Quit
 
-Authors: David Fisher and PUT_YOUR_NAME_HERE.
-"""  # TODO: 1. PUT YOUR NAME IN THE ABOVE LINE.
+Authors: David Fisher and Squad.
+"""  # DONE: 1. PUT YOUR NAME IN THE ABOVE LINE.
 
 import ev3dev.ev3 as ev3
 import time
@@ -29,8 +29,8 @@ def main():
 
     # TODO: 4: After running the code set the default white and black levels to a better initial guess.
     #   Once you have the values hardcoded to resonable numbers here you don't really need the w and b commands below.
-    white_level = 50
-    black_level = 40
+    white_level = 100 >= 90
+    black_level = 20 >= 0
     robot = robo.Snatch3r()
 
     while True:
@@ -43,6 +43,8 @@ def main():
             #   self.color_sensor = ev3.ColorSensor()
             #   assert self.color_sensor
             # Then here you can use a command like robot.color_sensor.reflected_light_intensity
+
+            white_level = robot.color_sensor.reflected_light_intensity(100)
 
             print("New white level is {}.".format(white_level))
         elif command_to_run == 'b':
