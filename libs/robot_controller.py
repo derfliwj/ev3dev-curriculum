@@ -13,6 +13,7 @@
 
 import ev3dev.ev3 as ev3
 import time
+import math
 
 
 class Snatch3r(object):
@@ -26,12 +27,14 @@ class Snatch3r(object):
         self.arm_motor = ev3.MediumMotor(ev3.OUTPUT_A)
         self.touch_sensor = ev3.TouchSensor()
         self.color_sensor = ev3.ColorSensor()
+        self.ir_sensor = ev3.InfraredSensor()
 
         assert self.left_motor.connected
         assert self.right_motor.connected
         assert self.arm_motor.connected
         assert self.touch_sensor
         assert self.color_sensor
+        assert self.ir_sensor
 
     def drive_inches(self, inch, speed):
         """Drives robot a distance at a given speed."""
@@ -129,3 +132,46 @@ class Snatch3r(object):
         """moves robot in reverse at set speed"""
         self.left_motor.run_forever(speed_sp=-int(left_speed))
         self.right_motor.run_forever(speed_sp=-int(right_speed))
+
+    def seek_beacon(self):
+        beacon_seeker = ev3.BeaconSeeker(channel=1)
+        forward_speed = 300
+        turn_speed = 100
+        while not self.touch_sensor.is_pressed:
+            current_heading = beacon_seeker.heading
+            current_distance = beacon_seeker.distance
+            if current_distance == -128:
+                print("IR Remote not found. Distance is -128")
+                self.right_motor.run_forever(speed_sp=-turn_speed)
+                self.left_motor.run_forever(speed_sp=turn_speed)
+            else:
+                if math.fabs(current_heading) < 2:
+                    print("On the right heading. Distance: ", current_distance)
+                    if current_distance > 0:
+                        self.right_motor.run_forever(speed_sp=forward_speed)
+                        self.left_motor.run_forever(speed_sp=forward_speed)
+                        print("Driving towards Beacon", current_distance)
+                    elif current_distance == 0:
+                        self.right_motor.stop(stop_action=ev3.Motor.STOP_ACTION_BRAKE)
+                        self.left_motor.stop(stop_action=ev3.Motor.STOP_ACTION_BRAKE)
+                        return True
+                if math.fabs(current_heading) > 2 & math.fabs(current_heading) < 10:
+                    print("Adjusting heading: ", current_heading)
+                    if current_heading < 0:
+                        self.left_motor.run_forever(speed_up=-turn_speed)
+                        self.right_motor.run_forever(speed_up=turn_speed)
+                        print("Turning Left", current_heading)
+                    elif current_heading > 0:
+                        self.left_motor.run_forever(speed_up=turn_speed)
+                        self.right_motor.run_forever(speed_up=-turn_speed)
+                        print("Turning Right", current_heading)
+                if math.fabs(current_heading) > 10:
+                    self.right_motor.run_forever(speed_sp=-turn_speed)
+                    self.left_motor.run_forever(speed_sp=turn_speed)
+                    print("Heading is too far off to fix: ", current_heading)
+
+            time.sleep(0.2)
+
+        print("Abandon ship!")
+        self.stop()
+        return False
