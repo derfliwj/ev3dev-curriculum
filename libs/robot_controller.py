@@ -173,5 +173,5 @@ class Snatch3r(object):
             time.sleep(0.2)
 
         print("Abandon ship!")
-        self.stop()
+        # self.stop()
         return False
