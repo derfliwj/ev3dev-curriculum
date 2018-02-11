@@ -53,6 +53,14 @@ class Snatch3r(object):
         self.left_motor.run_forever(speed_sp=left_speed)
         self.right_motor.run_forever(speed_sp=right_speed)
 
+    def turn_left(self, speed):
+        self.left_motor.run_forever(speed_sp=-speed)
+        self.right_motor.run_forever(speed_sp=speed)
+
+    def turn_right(self, speed):
+        self.left_motor.run_forever(speed_sp=speed)
+        self.right_motor.run_forever(speed_sp=-speed)
+
     def stop(self):
         """Stops robot"""
         self.right_motor.stop(stop_action=ev3.Motor.STOP_ACTION_BRAKE)
