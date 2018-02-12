@@ -28,6 +28,7 @@ class Snatch3r(object):
         self.touch_sensor = ev3.TouchSensor()
         self.color_sensor = ev3.ColorSensor()
         self.ir_sensor = ev3.InfraredSensor()
+        self.pixy = ev3.Sensor(driver_name="pixy-lego")
 
         assert self.left_motor.connected
         assert self.right_motor.connected
@@ -35,6 +36,7 @@ class Snatch3r(object):
         assert self.touch_sensor
         assert self.color_sensor
         assert self.ir_sensor
+        assert self.pixy
 
     def drive_inches(self, inch, speed):
         """Drives robot a distance at a given speed."""
@@ -50,6 +52,14 @@ class Snatch3r(object):
         """Drives forward continuously at a given speed"""
         self.left_motor.run_forever(speed_sp=left_speed)
         self.right_motor.run_forever(speed_sp=right_speed)
+
+    def turn_left(self, speed):
+        self.left_motor.run_forever(speed_sp=-speed)
+        self.right_motor.run_forever(speed_sp=speed)
+
+    def turn_right(self, speed):
+        self.left_motor.run_forever(speed_sp=speed)
+        self.right_motor.run_forever(speed_sp=-speed)
 
     def stop(self):
         """Stops robot"""
