@@ -107,6 +107,7 @@ def seek_beacon(robot):
                     robot.drive_forward(turn_speed, -turn_speed)
             if math.fabs(beacon_seeker.heading) > 10:
                 robot.stop()
+
                 print("Heading is too far off to fix: ", current_heading)
         time.sleep(0.2)
 
