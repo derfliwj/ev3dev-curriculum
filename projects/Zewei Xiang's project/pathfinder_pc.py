@@ -26,7 +26,7 @@ class MyDelegate(object):
         self.items = items
 
     def move_robot(self, data):
-        print(data)
+        # print(data)
         x = data[0]
         y = 500 - data[1]
 
@@ -34,10 +34,11 @@ class MyDelegate(object):
                                  y + 10)
         self.root.update()
 
-        # ???why not update
-
-        # def add_item(self, items):
-        #    self.items = items
+    def obstacle(self, data):
+        x = data[0]
+        y = 500 - data[1]
+        self.items.canvas.create_oval(x - 10, y - 10, x + 10, y + 10,
+                                      fill='yellow')
 
 
 def main():
@@ -59,7 +60,7 @@ def main():
     canvas.bind("<Button-1>",
                 lambda event: left_mouse_click(event, mqtt_client))
 
-    robot_con = ttk.Button(main_frame, text='connect_robot')
+    robot_con = ttk.Button(main_frame, text='check_connection')
     robot_con.grid(row=3, column=0)
     robot_con["command"] = lambda: robot_connection(items, mqtt_client)
 
