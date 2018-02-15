@@ -30,7 +30,6 @@ class MyDelegate(object):
         x = data[0]
         y = 500 - data[1]
 
-
         self.items.canvas.coords(self.items.robot, x - 10, y - 10, x + 10,
                                  y + 10)
         self.root.update()
