@@ -140,7 +140,6 @@ class Snatch3r(object):
 
     def stop_button(self):
         """stops robot"""
-        print("real stop")
         self.left_motor.stop()
         self.right_motor.stop()
 

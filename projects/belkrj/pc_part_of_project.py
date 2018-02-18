@@ -3,12 +3,17 @@
 import mqtt_remote_method_calls as com
 import tkinter
 from tkinter import ttk
+import time
 
 
 def main():
-    mqtt_client = com.MqttClient(PcDelegate)
+
+    pc_delegate = PcDelegate()
+    mqtt_client = com.MqttClient(pc_delegate)
+    pc_delegate.mqtt_client = mqtt_client
     mqtt_client.connect_to_ev3()
     starting(mqtt_client)
+    pc_delegate.loop_forever()
 
 
 def starting(mqtt_client):
@@ -129,10 +134,9 @@ def unthinkable_accepted(mqtt_client, previous_screen_root):
 
 def unthinkable_begin(mqtt_client):
 
-    robot_controls(mqtt_client)
-    count = 0
+    mqtt_client.send_message('op_unthinkable')
 
-    mqtt_client.send_message('operation_unthinkable', [int(count)])
+    robot_controls(mqtt_client)
 
 
 def robot_controls(mqtt_client):
@@ -253,7 +257,7 @@ class PcDelegate(object):
         unthinkable_failure_root = tkinter.Tk()
         unthinkable_failure_root.title('Failure')
 
-        unthinkable_failure_frame = ttk.Frame(unthinkable_failure_root, padding=1000)
+        unthinkable_failure_frame = ttk.Frame(unthinkable_failure_root, padding=100)
         unthinkable_failure_frame.grid()
 
         unthinkable_failure_title_label = ttk.Label(unthinkable_failure_frame, text='Mission Failed!', relief='raised')
@@ -299,6 +303,11 @@ class PcDelegate(object):
         unthinkable_passed_return_btn['command'] = lambda: main()
 
         unthinkable_passed_frame.mainloop()
+
+    def loop_forever(self):
+        self.running = True
+        while self.running:
+            time.sleep(0.1)
 
 
 def destroy_window(root):
