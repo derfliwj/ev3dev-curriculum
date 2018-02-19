@@ -7,22 +7,73 @@ import time
 
 
 def main():
-    print('Hello')
-    ev3.Sound.speak('Hello').wait()
+    print('Waiting for orders.')
     ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.RED)
     ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.RED)
 
     ev3_delegate = Ev3Delegate()
-    mqqt_client = com.MqttClient(ev3_delegate)
-    ev3_delegate.mqtt_client = mqqt_client
-    mqqt_client.connect_to_pc()
+    mqqt_client_op = com.MqttClient(ev3_delegate)
+    ev3_delegate.mqtt_client1 = mqqt_client_op
+    mqqt_client_op.connect_to_pc(lego_robot_number=22)
     ev3_delegate.loop_forever()
+
+
+def restart():
+    main()
 
 
 class Ev3Delegate(object):
     def __init__(self):
         self.robot = robo.Snatch3r()
-        self.mqtt_client = None
+        self.running = True
+        self.mqtt_client_op = None
+
+    def op_unthinkable(self):
+
+        control_delegate = ControlDelegate()
+        mqtt_client2 = com.MqttClient(control_delegate)
+        control_delegate.mqtt_client2 = mqtt_client2
+        control_delegate.mqtt_client2.connect_to_pc(lego_robot_number=97)
+
+        ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN)
+        ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.GREEN)
+
+        color_sensor = ev3.ColorSensor()
+        touch_sensor = ev3.TouchSensor()
+
+        while not touch_sensor.is_pressed:
+            if color_sensor.color == ev3.ColorSensor.COLOR_RED:
+                self.robot.shutdown()
+                ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.RED)
+                ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.RED)
+                ev3.Sound.speak('Mission Failure').wait()
+                control_delegate.mqtt_client2.send_message('unthinkable_failure')
+                restart()
+                break
+
+            elif color_sensor.color == ev3.ColorSensor.COLOR_GREEN:
+                ev3.Sound.speak('Object found.').wait()
+
+            elif color_sensor.color == ev3.ColorSensor.COLOR_BLUE:
+                ev3.Sound.speak('Drop off location found.').wait()
+
+            elif color_sensor.color == ev3.ColorSensor.COLOR_BLACK:
+                mqtt_client2.send_message('unthinkable_passed')
+
+        restart()
+        control_delegate.loop_forever()
+
+    def loop_forever(self):
+        self.running = True
+        while self.running:
+            time.sleep(0.1)
+
+
+class ControlDelegate(object):
+    def __init__(self):
+        self.robot = robo.Snatch3r()
+        self.running = True
+        self.mqtt_client2 = None
 
     def forward_button(self, left, right):
         self.robot.forward_button(left, right)
@@ -47,23 +98,6 @@ class Ev3Delegate(object):
 
     def shutdown(self):
         self.robot.shutdown()
-
-    def op_unthinkable(self):
-        ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.GREEN)
-        ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.GREEN)
-
-        if self.robot.color_sensor.color == self.robot.color_sensor.COLOR_RED:
-            ev3.Leds.set_color(ev3.Leds.LEFT, ev3.Leds.RED)
-            ev3.Leds.set_color(ev3.Leds.RIGHT, ev3.Leds.RED)
-            self.robot.stop_button()
-            ev3.Sound.speak('Mission Failure').wait()
-            self.mqtt_client.send_message('unthinkable_failure')
-
-        elif self.robot.color_sensor.color == self.robot.color_sensor.COLOR_GREEN:
-            ev3.Sound.speak('Object found.')
-
-        elif self.robot.color_sensor.color == self.robot.color_sensor.COLOR_BLUE:
-            ev3.Sound.speak('Drop off location found.')
 
     def loop_forever(self):
         self.running = True
