@@ -24,7 +24,7 @@ class Items(object):
         mqtt_client.send_message('moveto', [message])
 
 
-class MyDelegate(object):
+class MyDelegate(object): 
     def __init__(self, root, items):
         self.root = root
         self.items = items
