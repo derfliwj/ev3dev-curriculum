@@ -23,7 +23,7 @@ class Snatch3r(object):
         """construct a left motor and a right motor"""
 
         self.left_motor = ev3.LargeMotor(ev3.OUTPUT_B)
-        self.right_motor = ev3.LargeMotor(ev3.OUTPUT_D)
+        self.right_motor = ev3.LargeMotor(ev3.OUTPUT_C)
         self.arm_motor = ev3.MediumMotor(ev3.OUTPUT_A)
         self.touch_sensor = ev3.TouchSensor()
         self.color_sensor = ev3.ColorSensor()
@@ -190,14 +190,15 @@ class Snatch3r(object):
         return False
 
     def drive_to_color(self, color):
+        """Drives to specific color and plays specified .wav file!"""
         while not self.color_sensor.color == color:
             self.right_motor.run_forever(speed_sp=150)
             self.left_motor.run_forever(speed_sp=150)
         self.right_motor.stop(stop_action=ev3.Motor.STOP_ACTION_BRAKE)
         self.left_motor.stop(stop_action=ev3.Motor.STOP_ACTION_BRAKE)
         if color == ev3.ColorSensor.COLOR_RED:
-            ev3.Sound.play("/home/robot/csse120/assets/sounds/Enter_Sandman.wav")
+            ev3.Sound.play("/home/robot/csse120/assets/sounds/Enter_Sandman.wav").wait()
         elif color == ev3.ColorSensor.COLOR_BLUE:
-            ev3.Sound.play("/home/robot/csse120/assets/sounds/Luke_Bryan_-_That_s_My_Kind_Of_Night_with_Lyrics_.wav")
-        elif color == ev3.ColorSensor.Color_GREEN:
-            ev3.Sound.play("/home/robot/csse120/assets/sounds/Semi-Charmed_Life_1_.wav")
+            ev3.Sound.play("/home/robot/csse120/assets/sounds/Luke_Bryan_-_That_s_My_Kind_Of_Night_with_Lyrics_.wav").wait()
+        elif color == ev3.ColorSensor.COLOR_BLACK:
+            ev3.Sound.play("/home/robot/csse120/assets/sounds/Semi-Charmed_Life_1_.wav").wait()
