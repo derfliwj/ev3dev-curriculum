@@ -232,7 +232,7 @@ def play_wav_file():
     # File from http://www.moviesoundclips.net/ev3.Sound.php?id=288
     # Had to convert it to a PCM signed 16-bit little-endian .wav file
     # http://audio.online-convert.com/convert-to-wav
-    ev3.Sound.play("/home/robot/csse120/assets/sounds/Enter_Sandman.wav")
+    ev3.Sound.play("/home/robot/csse120/assets/sounds/awesome_pcm.wav")
 
 
 # ----------------------------------------------------------------------
