@@ -3,7 +3,6 @@ Author: Wes Derflinger
 """
 
 import mqtt_remote_method_calls as com
-import time
 import robot_controller as robo
 import ev3dev.ev3 as ev3
 
