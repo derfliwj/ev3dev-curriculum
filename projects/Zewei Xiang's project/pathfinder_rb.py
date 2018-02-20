@@ -5,11 +5,9 @@ import math
 
 
 class DataContainer(object):
-    """ Helper class that might be useful to communicate between different callbacks."""
-
     def __init__(self):
         self.running = True
-        self.robot_state = 0  # 0 is stop, 1 is looking for path, 2 is blocking
+        self.robot_state = 0  # 0 is stop, 1 is looking for path
         self.destination_x = 250
         self.destination_y = 250
         self.angle = 0
@@ -39,12 +37,12 @@ class MyDelegate(object):
 def robot_command(dc, robot, mqtt_client, command):
     angle = dc.angle
     if command == 'left':
-        robot.drive_degree(4, 400)
+        robot.drive_degree(3.8, 400)
         # the difference of turning degree is
         # caused by the frequently start and stop of the robot
         dc.angle = dc.angle + 5
     elif command == 'right':
-        robot.drive_degree(-4, 400)
+        robot.drive_degree(-3.8, 400)
         # the difference of turning degree is
         # caused by the frequently start and stop of the robot
         dc.angle = dc.angle - 5
@@ -53,7 +51,7 @@ def robot_command(dc, robot, mqtt_client, command):
         dc.x = dc.x + math.cos(angle * 3.14 / 180) * 10
         dc.y = dc.y + math.sin(angle * 3.14 / 180) * 10
         # print(dc.x, dc.y)
-    message = [dc.x, dc.y]
+    message = [dc.x, dc.y, angle]
     mqtt_client.send_message('move_robot', [message])
 
 
